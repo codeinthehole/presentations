@@ -1,0 +1,919 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <title>CommandLineFu for web develepers</title>
+        <!-- metadata -->
+        <meta name="generator" content="S5" />
+        <meta name="version" content="S5 1.1" />
+        <meta name="presdate" content="20110309" />
+        <meta name="author" content="David Winterbottom" />
+        <meta name="company" content="Tangent Labs" />
+        <!-- configuration parameters -->
+        <meta name="defaultView" content="slideshow" />
+        <meta name="controlVis" content="hidden" />
+        <!-- style sheet links -->
+        <link rel="stylesheet" href="ui/default/slides.css" type="text/css" media="projection" id="slideProj" />
+        <link rel="stylesheet" href="ui/default/outline.css" type="text/css" media="screen" id="outlineStyle" />
+        <link rel="stylesheet" href="ui/default/print.css" type="text/css" media="print" id="slidePrint" />
+        <link rel="stylesheet" href="ui/default/opera.css" type="text/css" media="projection" id="operaFix" />
+        <!-- S5 JS -->
+        <script src="ui/default/slides.js" type="text/javascript"></script>
+    </head>
+    <body>
+
+        <div class="layout">
+            <div id="controls"><!-- DO NOT EDIT --></div>
+            <div id="currentSlide"><!-- DO NOT EDIT --></div>
+            <div id="header"></div>
+            <div id="footer">
+                <h1>ConFoo 2011 - Friday 11th March 2011</h1>
+                <h2>CommandLineFu for web developers</h2>
+            </div>
+        </div>
+
+
+        <div class="presentation">
+
+            <div class="slide">
+                <h1><code>command-line-fu</code> for web developers</h1>
+                <p id="title-link">because</p>
+                <code class="main">$ [ $(man bash | wc -l) -gt 3000 ] &amp;&amp; exit</code>
+                <h3>David Winterbottom | @codeinthehole</h3><br/>
+                <h4>
+                    <img src="images/tangent-labs.gif"  />
+                    <img src="images/header-logo.jpg"  />
+                </h4>
+            </div>
+
+            <div class="slide">
+                <img src="images/clf.png?" class="screenshot" />
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Why you should care...</h1>
+                <ul class="incremental">
+                    <li>Lots of real-world problems are text based</li>
+                    <li>Everyone needs to work on remote servers</li>
+                    <li>Commandlinefu -&gt; big productivity gains</li>
+                    <li>Many developers only know IDEs...</li>
+                    <li>...but real hackers use the commandline...</li>
+                    <li>...as it gives you God-like powers...</li>
+                    <li>...and makes you irresistable to the opposite sex.</li>
+                </ul>
+                <div class="handout">
+                    * IDEs can lead to lack of understanding of the tool (eg SVN)
+                    * I am a big fan of commandline and am creator of commandlinefu.com, from
+                    which many of these tips come from.
+                    * Am not a massive expert, more a collector.  Am not a sysadmin
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Disclaimer</h1>
+                <ul class="incremental">
+                    <li>Mainly talking about BASH here</li>
+                    <li>Most tips are transferable to any (unix) terminal...</li>
+                    <li>...but many are BASHisms (not part of POSIX)</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Overview</h1>
+                <ol>
+                    <li>What everyone should know...</li>
+                    <li>History</li>
+                    <li>MySQL</li>
+                    <li>SSH</li>
+                    <li>BASH Shortcuts</li>
+                    <li>Miscellany</li>
+                </ol>
+                <div class="handout">
+                    -- basics not really that basic
+                    -- talk for anyone who types stuff in linux
+                    -- there are lots of bash features that can make your life easier / improve productivity
+                    -- sense of power
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1 class="section">What everyone<br/>should know</h1>
+            </div>
+
+            <div class="slide">
+                <h1>UNIX toolset</h1>
+                <ul>
+                    <li>Learn the basic utilities:
+                    <table class="definitions">
+                        <tr><th><code>grep</code></th><td>Searching for text pattern</td></tr>
+                        <tr><th><code>awk</code></th><td>Script language for text-processing</td></tr>
+                        <tr><th><code>sed</code></th><td>Textual transformations</td></tr>
+                        <tr><th><code>wc</code></th><td>Counting lines/chars</td></tr>
+                        <tr><th><code>find</code></th><td>Searching for files</td></tr>
+                        <tr><th><code>ps</code></th><td>Information on running processes</td></tr>
+                        <tr><th><code>top</code></th><td>System load and processes</td></tr>
+                    </table>
+                    </li>
+                    <li><a href="http://en.wikipedia.org/wiki/List_of_Unix_programs">http://en.wikipedia.org/wiki/List_of_Unix_programs</a></li>
+                </ul>
+                <div class="handout">
+                    - unix philosophy of doing one thing well
+                    - basic building blocks 
+                    - awk is a scripting language
+                    - awk and sed are turing complete
+                    - computation of string STDIN input
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>I/O redirection</h1>
+                <ul>
+                    <li>Learn how to handle input (STDIN) and output (STDOUT, STDERR):
+                    <table class="shell-snippets">
+                        <tr><th><code>$ command &gt; outfile </code></th><td>Redirect output to file</td></tr>
+                        <tr><th><code>$ command &gt;&gt; outfile</code></th><td>Redirect output and append to file</td></tr>
+                        <tr><th><code>$ command 2&gt; outfile</code></th><td>Redirect STDERR</td></tr>
+                        <tr><th><code>$ command &amp;&gt; outfile</code></th><td>Redirect STDOUT and STDERR</td></tr>
+                        <tr><th><code>$ cat example.txt | wc -l</code></th><td>Pipe output (STDOUT) from one program into another (as STDIN)</td></tr>
+                    </table>
+                    </li>
+                </ul>
+                <div class="handout">
+                    -- with knowledge of the core tools and the various mechanisms for 
+                    chaining them together - an awful lot of power is at your disposal
+                    -- pipes and filters (sed,grep)
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Example</h1>
+                <code class="main">$ head -10000 /var/log/apache2/access.log | awk '{print $1}' | sort | uniq -c | sort -rn | head</code>
+                <ul>
+                    <li>Prints the top 10 IP address from your apache access log
+                    <ul>
+                        <li><code>head -10000</code> - Grab first 10000 lines</li>
+                        <li><code>awk '{print $1}'</code> - Select first field from each line</li>
+                        <li><code>sort</code> - Sort STDIN alphabetically</li>
+                        <li><code>uniq -c</code> - Return frequency of each line</li>
+                        <li><code>sort -rn</code> - Sort numerically (in reverse order)</li>
+                        <li><code>head</code> - Grab top 10 results</li>
+                    </ul>
+                    </li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Lesser known commands: <code>tee</code></h1>
+                <code class="main">echo "example" | tee file.txt</code>
+                <ul>
+                    <li>Duplicates output of a program to a file and STDOUT</li>
+                </ul>
+                <code class="main">echo "example" | sudo tee root-owned-file.txt</code>
+                <ul>
+                    <li>Can be used to elevate privileges for redirection </li>
+                </ul>
+                <code class="main">echo "example" | tee &gt;(rev) &gt;(sed 's/e//g')</code>
+                <ul>
+                    <li>Process a pipe with 2 or more processes</li>
+                </ul>
+                <div class="handout">
+                    -- we'll see a clever use of this with vim later on
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Lesser known commands: <code>at</code>, <code>batch</code></h1>
+                <code class="main">$ echo "ps aux &gt; ~/stats.txt" | at 23:00</code>
+                <ul>
+                    <li>Allows one-off commands to be scheduled for a certain time</li>
+                </ul>
+                <code class="main">$ echo "~/put-kettle-on.sh" | at teatime</code>
+                <ul>
+                    <li>Sophisticated time specifications</li>
+                    <li>Job list can be inspected with <code>atq</code></li>
+                </ul>
+                <code class="main">echo "~/heavy-process.sh" | batch</code>
+                <ul>
+                    <li>Only runs command when system load drops below 1.5</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Lesser known commands: <code>locate</code></h1>
+                <code class="main output">$ locate couch<br/>
+                    /etc/couchdb<br/>
+                    /etc/couchdb/default.d<br/>
+                    /etc/couchdb/default.ini<br/>
+                    /etc/couchdb/local.d<br/>
+                    /etc/couchdb/local.ini
+                </code>
+                <ul>
+                    <li>Finds file by name</li>
+                    <li>Searches databases prepared by <code>updatedb</code></li>
+                    <li>Searches for <code>*$PATTERN*</code></li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Lesser known commands: <code>apropos</code></h1>
+                <code class="main">$ apropos couch<br/>
+                    couchdb (1)          - Apache CouchDB database server<br/>
+                    couchdb-dump (1)     - a CouchDB dump utility<br/>
+                    couchdb-load (1)     - a CouchDB load utility</br>
+                    couchjs (1)          - Apache CouchDB JavaScript interpreter</br>
+                    couchpy (1)          - a CouchDB Python view server</code>
+                <ul>
+                    <li>Searches man pagenames and descriptions</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Combining commands: <code>&amp;&amp;</code>, <code>;</code></h1>
+                <code class="main">$ markdown README.md &gt; md.html &amp;&amp; x-www-browser md.html</code>
+                <ul>
+                    <li>Conditionally execute command</li>
+                </ul>
+                <code class="main">$ ./long-running-local-job.sh ; notify-send "Job is now finished"<br/>
+                    $ ./long-running-process.sh ; eject<br/>
+                </code>
+                <ul>
+                    <li>Notify when long-running LOCAL job finishes</li>
+                </ul>
+                <code class="main">$ ./long-running-remote-job.sh | mail -s "Job is finished" root@commandlinefu.com</code>
+                <ul>
+                    <li>Notify when long-running REMOTE job is finished</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <!-- HISTORY -->
+
+            <div class="slide">
+                <h1 class="section">History</h1>
+            </div>
+
+            <div class="slide">
+                <h1>Retrieving commands</h1>
+                <ul>
+                    <li>Aim is to never have to retype previous commands.</li>
+                    <li>Major productivity boost</li>
+                    <li>Various ways to search history:
+                    <ul>
+                        <li>Pressing <span class="key">UP</span> lots...</li>
+                        <li><span class="key">Ctrl</span>+<span class="key">R</span> - reverse history search 
+                        (matches any line that contains search query)</li>
+                        <li>Use readline library...</li>
+                    </ul>
+                    </li>
+                </ul>
+                <div class="handout">
+                    -- default configuration can be improved
+                    -- hackers don't press UP
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Incremental search</h1>
+                <ul>
+                    <li>Add following to your <code>~/.inputrc</code>
+                    <pre>"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\e[C": forward-char
+"\e[D": backward-char</pre>
+                    </li>
+                    <li>Type a few characters and press <span class="key">UP</span></li>
+                    <li>This works for any REPL library that uses readline (eg, MySQL, Python)</li>
+                    <li>Life-changing productivity boost</li>
+                </ul>
+                <div class="handout">
+                    More inputrc tips to come
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>History file tweaks</h1>
+                <ul>
+                    <li>Keep a large history to maximise re-use</li>
+                    <li>In <code>~/.bashrc</code>:
+                    <table class="definitions">
+                        <tr>
+                            <th><code>export HISTFILESIZE=10000</code></th>
+                            <td>Max number of lines in <code>HISTFILE</code></td>
+                        </tr>
+                        <tr>
+                            <th><code>export HISTSIZE=10000</code></th>
+                            <td>Number of lines to save from current session</td>
+                        </tr>
+                        <tr>
+                            <th><code>shopt -s histappend</code></th>
+                            <td>Append to history file rather than overwriting</td>
+                        </tr>
+                        <tr>
+                            <th><code>export HISTCONTROL=erasedups</code></th>
+                            <td>Don't store duplicate commands</td>
+                        </tr>
+                        <tr>
+                            <th><code>export HISTIGNORE="[bf]g:[&nbsp;]*:exit"</code></th>
+                            <td>Control which commands to ignore</td>
+                        </tr>
+                    </table>
+                    </li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>History expansion 1: Event designators</h1>
+                <ul><li>Shorthand/DSL for retreiving and manipulating historical commands.<br/>
+                    <table class="shell-snippets">
+                        <tr><th><code>$ !12</code></th>
+                            <td>Command number 12 from <code>~/.bash_history</code></td></tr>
+                        <tr><th><code>$ !-2</code></th>
+                            <td>Command before last</td></tr>
+                        <tr><th><code>$ !zi</code></th>
+                            <td>Last command that started 'zi'</td></tr>
+                        <tr><th><code>$ !!</code></th>
+                            <td>Last command (same as <code>!-1</code>)</td></tr>
+                    </table>
+                    </li>
+                    <li>Commands are executed immediately</li>
+                </ul>
+                <div class="handout">
+                    - beware of getting too cryptic
+                    - see man bash for more details
+                    - !! is an event designator
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Digression: This time I mean it!</h1>
+                <code class="main">$ sudo !!</code>
+                <ul>
+                    <li><code>!!</code> plucks last command from history</li>
+                    <li>BASH-specific</li>
+                    <li>Super useful!</li>
+                </ul>
+                <code class="main">$ say "make me a sandwich"<br/>
+                    say: what? make it yourself.<br/>
+                    $ sudo !!<br/>
+                    $</code>    
+            </div>
+
+            <div class="slide">
+                <h1>Digression: Oops - forgot the sudo</h1>
+                <code class="main">:w !sudo tee %</code>
+                <ul>
+                    <li>Vim equivalent of <code>sudo !!</code></li>
+                    <li>For when you forget to edit file with sudo</li>
+                    <li><code>:w</code> passes file contents to command as STDIN</li>
+                    <li><code>%</code> is filename</li>
+                    <li>Add shortcut in <code>~/.vimrc</code><br/>
+                    <code>cmap w!! %!sudo tee &gt; /dev/null %</code></li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <h1>History expansion 2: Word designators</h1>
+                <ul>
+                    <li>Shorthand for referencing 'words' from previous commands.<br/>
+                    <table class="shell-snippets">
+                        <tr><th><code>$ !$</code></th>
+                            <td>Last word from previous command (better to use <span class="key">ALT</span>+<span class="key">.</span>)</td></tr>
+                        <tr><th><code>$ !:2</code></th>
+                            <td>Second (0-indexed) word from last command</td></tr>
+                        <tr><th><code>$ !^</code></th>
+                            <td>First argument (word 1) from last command</td></tr>
+                    </table>
+                    </li>
+                    <li>Demo...</li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <h1>History expansion 3: Modifiers</h1>
+                <ul>
+                    <li>Modifies behaviour of preceding event/word designators<br/>
+                    <table class="shell-snippets">
+                        <tr><th><code>$ !zip:p</code></th>
+                            <td>Print previous command starting 'zip' but don't execute it</td></tr>
+                        <tr><th><code>$ cd !$:h</code></th>
+                            <td>Change directory to "head" of previous last argument (similar to using <code>dirname</code>)</td></tr>
+                        <tr><th><code>$ !!:s/foo/bar</code></th>
+                            <td>Execute previous command but replace 'foo' with 'bar'</td></tr>
+                        <tr><th><code>$ ^foo^bar</code></th>
+                            <td>Shorthand for the above</td></tr>
+                    </table>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <h1>Magic space</h1>
+                <ul>
+                    <li>History expansion can lead to very cryptic commands</li>
+                    <li>Use "magic space" to expand commands before executing</li>
+                </ul>
+                <pre>$if Bash
+	Space: magic-space
+$endif </div>
+
+            <div class="slide">
+                <h1>Alias common commands</h1>
+                <code class="main">history | awk '{print $2}' | sort | uniq -c | sort -n | tail</code>
+                <ul>
+                    <li>Find your most used commands</li>
+                    <li>Create aliases in <code>~/.bashrc</code>
+                    <pre>alias pu='phpunit --colors'
+alias ip='ipython'</pre>
+                    </li>
+                </ul>
+                <div class="handout">
+                    -- some commands support their own form of aliasing (eg git)
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Script common actions</h1>
+                <ul>
+                    <li>Write scripts for common jobs</li>
+                    <li>Create a local <code>bin</code> folder on your path</li>
+                </ul>
+                <pre>PATH="/home/david/bin:$PATH"
+export PATH<pre>
+                <div class="handout">
+                </div>
+            </div>
+
+            <!-- MYSQL -->
+
+            <div class="slide">
+                <h1 class="section">MySQL</h1>
+            </div>
+
+            <div class="slide">
+                <h1><code>~/.my.cnf</code> - Easy authentication</h1>
+                <ul>
+                    <li>For user-specific options</li>
+                    <li>Add some user credentials (read-only access is a good idea):
+                    <pre>[client]
+user = local-user
+password = s3cr3tp455w0rd</pre>
+                    </li>
+                    <li>MySQL commandline utilities no longer prompt for user/password</li>
+                    <li>Ensure file is only readable by your user</li>
+                </ul>
+                <code class="main">$ chmod 600 ~/.my.cnf</code>
+                <div class="handout">
+                    - for setting user-specific options
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1><code>~/.my.cnf</code> - Custom prompt</h1>
+                <ul>
+                    <li>Add useful information to your prompt:
+                    <pre>[mysql]
+prompt=(\\u@\\h) [\\d]>\\_</pre>
+                    </li>
+                    <li>Show user, host and selected database:
+                    </li>
+                </ul>
+                <code class="main">(root@localhost) [wl_demo]> SELECT User,Host from mysql.user;</code>
+                <div class="handout">
+
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Remote backups</h1>
+                <code class="main">$ ssh $HOST 'mysqldump $DATABASENAME | gzip' &gt; /var/backups/backup-`date +%Y-%m-%d`.sql.gz</code>
+                <ul>
+                    <li>Creates a backup of a remote database (creating a file using today's date)</li>
+                    <li>Needs a remote <code>~/.my.cnf</code> to avoid authentication prompt</li>
+                    <li>Runs nicely from <code>cron</code></li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Copy database between machines</h1>
+                <code class="main">$ mysqldump -h $HOST -u $USER -p $DATABASENAME | mysql -D $DATABASENAME</code>
+                <ul>
+                    <li>Copies SQL over the wire</li>
+                    <li><code>mysql</code> reads SQL from STDIN</li>
+                </ul>
+                <code class="main">$ mysqldump -h $HOST -u $USER -p $DATABASENAME | sed 's/@[a-zA-Z0-9.]*/@localhost' | mysql -D $DATABASENAME</code>
+                <ul>
+                    <li>Anonymise email addresses as part of copy</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Monitor queries</h1>
+                <code class="main">$ watch -n 1 "mysqladmin processlist"</code>
+                <ul>
+                    <li>Shows query list every second</li>
+                    <li><code>watch</code> is a useful command to know</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Complex SQL queries</h1>
+                <code class="main">$ echo "SHOW TABLES LIKE 'App__%'" | mysql -D $DATABASENAME | sed "1 d" | awk '{print "DROP TABLE `"$1"`;"}' | mysql -D $DATABASENAME</code>
+                <ul>
+                    <li>Drops all tables that match <code>App__%</code></li>
+                    <li>Dynamically build SQL using <code>awk</code></li>
+                    <li><code>sed</code> is used to discard header line</li>
+                    <li>Better to <code>echo</code> in SQL than use <code>-e</code> option </li>
+                </ul>
+                <div class="handout">
+                    piping is better than mysql -e
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Maatkit (<code>mk-*</code>)</h1>
+                <ul>
+                    <li>Toolkit for open-source databases (mainly MySQL)</li>
+                    <li>Provides 28 very useful executables</li>
+                </ul>
+                <code class="main">$ mk-find --engine MyISAM --exec "ALTER TABLE %D.%N ENGINE=InnoDB"</code>
+                <ul>
+                    <li>Finds MyISAM tables and converts them to InnoDB</li>
+                    <li><code>mk-find</code> is like GNU <code>find</code> but for tables</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <!-- SSH -->
+
+            <div class="slide">
+                <h1 class="section">Secure Shell (SSH)</h1>
+            </div>
+
+
+            <!-- SSH 
+            http://www.linuxjournal.com/article/6602
+            -->
+
+            <div class="slide">
+                <h1>Secure Shell (SSH)</h1>
+                <ul>
+                    <li>Much more than logging into remote machines and copying files</li>
+                    <li>Also supports:
+                    <ul>
+                        <li>executing remote commands</li>
+                        <li>tunnelling</li>
+                        <li>port forwarding</li>
+                        <li>X11 forwarding</li>
+                    </ul>
+                    </li>
+                </ul>
+                <div class="handout">
+                    - replacement for telnet
+                    - network protocol using pulic key cryptography
+                    - typically used for logging into a remote machine
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>SSH 101</h1>
+                <table class="shell-snippets">
+                    <tr><th><code>$ ssh user@host</code></th>
+                        <td>Login to remote host</td></tr>
+                    <tr><th><code>$ ssh user@host 'ls /tmp'</code></th>
+                        <td>Execute command on remote host</td></tr>
+                    <tr><th><code>$ scp file.txt user@host:</code></th>
+                        <td>Copy file to remote host</td></tr>
+                </table>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Public keys</h1>
+                <ul>
+                    <li>
+                    Benefits of using a public key:
+                    <ul>
+                        <li>password-less access to remote host</li>
+                        <li>more secure and flexible</li>
+                        <li>use a passphrase (and an authentication agent)</li>
+                    </ul>
+                    </li>
+                </ul>
+                <table class="shell-snippets">
+                    <tr><th><code>$ ssh-keygen -t rsa</code></th>
+                        <td>Generate public key</td></tr>
+                    <tr><th><code>$ ssh-copy-id user@host</code></th>
+                        <td>Copy public key to host</td></tr>
+                    <tr><th><code>$ ssh user@host</code></th>
+                        <td>No password prompt when logging in</td></tr>
+                </table>
+                <div class="handout">
+                    - eg github
+                    - should use a passphrase - gnome keyring manager can take care of it for you
+                    - or use ssh-agent to store it in memory
+                </div>
+            </div>
+
+
+            <div class="slide">
+                <h1><code>~/.ssh/config</code> - Named hosts</h1>
+                <ul>
+                    <li>User-specified SSH config options</li>
+                    <li>Add nicknames for commonly used hosts (with tab-complete support):
+                    <pre>Host mysite-app1
+    HostName 74.117.251.129
+    User myuser
+    Port 3162 </pre>
+                    </li>
+                    <li>Global options<br/>
+                    <pre>Host *
+Compression yes
+KeepAlive yes</pre>
+                    </li>
+                </ul>
+                <div class="handout">
+                    - each option equivalent to a commandline option
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Custom prompts</h1>
+                <code class="main">david@earth:~ $ </code>
+                <code class="main"><span style="color:red">root@mysite-app1:tmp $</span></code>
+
+                <ul>
+                    <li>In <code>~/.bashrc</code>:
+                    <pre>if [ `id -u` = 0 ]; then
+    PS1="\[\e[31m\]\u@\h:\W \$ \[\e[30m\]"
+else 
+    PS1="\[\e[34m\]\u@\h:\W \$ \[\e[30m\]"
+fi
+export PS1
+</pre>
+                    </li>
+                    <li>Keep useful information in your prompt</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Mount using SSH: <code>sshfs</code></h1>
+                <code class="main">$ sshfs $SERVER:/path/to/folder /path/to/mount/point</code>
+                <ul>
+                    <li>Mount a folder through SSH</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Connect to unreachable hosts</h1>
+                <code class="main">ssh -t $REACHABLE_HOST ssh $UNREACHABLE_HOST</code>
+                <ul>
+                    <li>Opens a SSH connection to the unreachable host</li>
+                    <li>Can be generalised to use any number of hosts</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Remote diff</h1>
+                <code class="main">ssh $HOST cat /path/to/file.txt | diff /path/to/local-file.txt -</code>
+                <ul>
+                    <li>Compares remote file to local version</li>
+                </ul>
+                <code class="main">diff &lt;(ssh $HOST1 cat /etc/apt/sources.list) &lt;(ssh $HOST2 cat /etc/apt/sources.list)</code>
+                <ul>
+                    <li>Compares two remote files</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Cluster SSH</h1>
+                <code class="main">cssh mysite-app1 mysite-app2 mysite-app3</code>
+                <ul>
+                    <li>Execute commands on multiple hosts at the same time </li>
+                    <li>Opens a window for each host...</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>GNU Screen</h1>
+                <ul>
+                    <li>Virtual terminal multiplexer:
+                    <ul>
+                        <li>Multiple terminal sessions inside single terminal window</li>
+                        <li>Detaching and reattaching sessions</li>
+                        <li>Sharing sessions</li>
+                    </ul>
+                    </li>
+                    <li>Meta commands start with <span class="key">Ctrl</span>+<span class="key">A</span></li>
+                    <li>Get help with <span class="key">Ctrl</span>+<span class="key">A</span> then <span class="key">?</span></li>
+                </ul>
+                <div class="handout">
+                    --like a text version of a window manager
+                </div>
+            </div>
+
+            <!-- BASH shortcuts -->
+
+            <div class="slide">
+                <h1 class="section">Miscellany</h1>
+            </div>
+
+            <div class="slide">
+                <h1>Terminal program</h1>
+                <ul>
+                    <li>Use a keyboard shortcut to open a terminal
+                    <ul>
+                        <li><span class="key">Alt</span>+<span class="key">Space</span> is good</li>
+                    </ul>
+                    </li>
+                    <li>Learn your terminal program (eg <code>gnome-terminal</code>):
+                    <ul>
+                        <li><span class="key">Ctrl</span>+<span class="key">Shift</span>+<span class="key">T</span> - open new tab</li>
+                        <li><span class="key">Ctrl</span>+<span class="key">Shift</span>+<span class="key">W</span> - close tab</li>
+                        <li><span class="key">Alt</span>+[<span class="key">1</span>,<span class="key">2</span>,...] - jump to nth tab</li>
+                    </ul>
+                    </li>
+                    <li>Try multi-terminal programs (eg <code>GNOME terminator</code>)</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <img src="images/terminator-mad.png" class="screenshot" />
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>BASH keyboard shortcuts</h1>
+                <ul>
+                    <li>Lots available - look them up.
+                    <table class="key-bindings">
+                        <tr><th><span class="key">Ctrl</span> + <span class="key">A</span></th><td>Move to start of line</td></tr>
+                        <tr><th><span class="key">Ctrl</span> + <span class="key">E</span></th><td>Move to end of line</td></tr>
+                        <tr><th><span class="key">Ctrl</span> + <span class="key">K</span></th><td>Delete from cursor to end of line</td></tr>
+                        <tr><th><span class="key">Ctrl</span> + <span class="key">W</span></th><td>Delete from cursor to start of word</td></tr>
+                    </table>
+                    </li>
+                    <li>These are emacs bindings, vi bindings are available too:
+                <pre>set -o vi</pre>
+                    </li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Change to previous working directory</h1>
+                <code class="main">cd -</code>
+                <ul>
+                    <li><code>-</code> is shorthand for previous directory</li>
+                    <li>Equivalent to:</li>
+                </ul>
+                <code class="main">cd $OLDPWD</code>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Brace expansion</h1>
+                <code class="main">cp /path/to/file{,.bak}</code>
+                <ul>
+                    <li>Equivalent to:</li>
+                </ul>
+                <code class="main">cp /path/to/file /path/to/file.bak</code>
+                <ul>
+                    <li>Can be used in sequences and with wildcards</li> 
+                </ul>
+                <code class="main">$ cssh mysite-{app,db}{1..32}<br/>
+                    $ ls *.{jpg,jpeg,png}
+                </code>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Follow log files</h1>
+                <code class="main output">$ tail -f /var/log/apache2/error.log</code>
+                <ul>
+                    <li>Run <code>tail</code> in "follow" mode</li>
+                    <li>Outputs appended data as the file grows</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Flush file</h1>
+                <code class="main output">$ &gt; /var/log/apache2/error.log</code>
+                <ul>
+                    <li>Flushes contents of file</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Search codebase</h1>
+                <code class="main output">$ grep -inHr $QUERY ~/workspace/project | grep -v .svn</code>
+                <ul>
+                    <li>Searches recursively for pattern</li>
+                    <li><code>grep -v</code> filters out unwanted results</li>
+                </ul>
+                    <div class="handout">
+                    </div>
+                </div>
+
+                <div class="slide">
+                    <h1>Use python to server current directory</h1>
+                    <code class="main">python -m SimpleHTTPServer</code>
+                    <ul>
+                        <li>Creates a dedicated server running on port 8000</li>
+                        <li><code>-m</code> argument specifies a module to execute</li>
+                        <li>Default behaviour of <code>SimpleHTTPServer</code> is to run as webserver in current directory</li>
+                    </ul>
+                    <code class="main">sudo python -m smtpd -n -c DebuggingServer localhost:25</code>
+                    <ul><li>Similar but creating a SMTP server</li><ul>
+                            <div class="handout">
+                            </div>
+                        </div>
+
+                        <!-- SUMMARY -->
+                        <div class="slide">
+                            <h1 class="section">Summary</h1>
+                        </div>
+
+                        <div class="slide">
+                            <h1>Summary</h1>
+                            <ul>
+                                <li>Mastery of the shell is a key part of being a good developer</li>
+                                <li>A small amount of knowledge can make a big difference to your productivity</li>
+                                <li>Optimise you work-flow using shortcuts, functions, config files</li>
+                            </ul>
+                            <div class="handout">
+                            </div>
+                        </div>
+
+                        <div class="slide">
+                            <h1>Further reading</h1>
+                            <ul>
+                                <li><a href="http://www.commandlinefu.com">commandlinefu.com</a></li>
+                                <li><a href="http://catonmat.net">catonmat.net</a> (Peteris Krumins)</li>
+                            </li>
+                        </ul>
+                        <div class="handout">
+                        </div>
+                    </div>
+
+                    <!-- TEMPLATE SLIDE - DO NOT OVERWRITE 
+                    <div class="slide">
+                        <h1></h1>
+                        Further reading:
+                        <ul>
+                            <li>
+                            <a href="http://www.ukuug.org/events/linux2003/papers/bash_tips/">http://www.ukuug.org/events/linux2003/papers/bash_tips/</a>
+                            </li>
+                        </ul>
+                        <div class="handout">
+                        </div>
+                    </div>
+                    -->
+
+                </div>
+            </body>
+        </html>
