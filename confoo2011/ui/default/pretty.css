@@ -209,6 +209,9 @@ table.key-bindings {
 table.key-bindings th {
     padding-right: 0.4em;
 }
+table.key-bindings td {
+    font-size: 0.8em;
+}
 p#title-link {
     text-align: center;
     font-size: 0.6em;

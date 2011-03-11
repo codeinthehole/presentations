@@ -34,7 +34,6 @@
             </div>
         </div>
 
-
         <div class="presentation">
 
             <div class="slide">
@@ -49,7 +48,7 @@
             </div>
 
             <div class="slide">
-                <img src="images/clf.png?" class="screenshot" />
+                <img src="images/clf1.png?" class="screenshot" />
                 <div class="handout">
                 </div>
             </div>
@@ -62,8 +61,7 @@
                     <li>Commandlinefu -&gt; big productivity gains</li>
                     <li>Many developers only know IDEs...</li>
                     <li>...but real hackers use the commandline...</li>
-                    <li>...as it gives you God-like powers...</li>
-                    <li>...and makes you irresistable to the opposite sex.</li>
+                    <li>...as it gives you God-like powers</li>
                 </ul>
                 <div class="handout">
                     * IDEs can lead to lack of understanding of the tool (eg SVN)
@@ -75,7 +73,7 @@
 
             <div class="slide">
                 <h1>Disclaimer</h1>
-                <ul class="incremental">
+                <ul >
                     <li>Mainly talking about BASH here</li>
                     <li>Most tips are transferable to any (unix) terminal...</li>
                     <li>...but many are BASHisms (not part of POSIX)</li>
@@ -117,7 +115,6 @@
                         <tr><th><code>wc</code></th><td>Counting lines/chars</td></tr>
                         <tr><th><code>find</code></th><td>Searching for files</td></tr>
                         <tr><th><code>ps</code></th><td>Information on running processes</td></tr>
-                        <tr><th><code>top</code></th><td>System load and processes</td></tr>
                     </table>
                     </li>
                     <li><a href="http://en.wikipedia.org/wiki/List_of_Unix_programs">http://en.wikipedia.org/wiki/List_of_Unix_programs</a></li>
@@ -243,7 +240,7 @@
 
             <div class="slide">
                 <h1>Combining commands: <code>&amp;&amp;</code>, <code>;</code></h1>
-                <code class="main">$ markdown README.md &gt; md.html &amp;&amp; x-www-browser md.html</code>
+                <code class="main">$ (markdown README.md &gt; md.html) &amp;&amp; x-www-browser md.html</code>
                 <ul>
                     <li>Conditionally execute command</li>
                 </ul>
@@ -256,6 +253,17 @@
                 <code class="main">$ ./long-running-remote-job.sh | mail -s "Job is finished" root@commandlinefu.com</code>
                 <ul>
                     <li>Notify when long-running REMOTE job is finished</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Beep when server comes back up</h1>
+                <code class="main">$ ping -i 60 -a $IPADDRESS</code>
+                <ul>
+                    <li>Ping every 60 seconds</li>
+                    <li>Beep when a packet is received</li>
                 </ul>
                 <div class="handout">
                 </div>
@@ -276,7 +284,10 @@
                     <ul>
                         <li>Pressing <span class="key">UP</span> lots...</li>
                         <li><span class="key">Ctrl</span>+<span class="key">R</span> - reverse history search 
-                        (matches any line that contains search query)</li>
+                        <ul>
+                            <li>matches any line that contains search query</li>
+                            <li>"bookmark" commands with comments</li>
+                        </ul>
                         <li>Use readline library...</li>
                     </ul>
                     </li>
@@ -373,6 +384,7 @@
                     say: what? make it yourself.<br/>
                     $ sudo !!<br/>
                     $</code>    
+                <p><a href="http://xkcd.com/149/">http://xkcd.com/149/</a></p>
             </div>
 
             <div class="slide">
@@ -383,7 +395,7 @@
                     <li>For when you forget to edit file with sudo</li>
                     <li><code>:w</code> passes file contents to command as STDIN</li>
                     <li><code>%</code> is filename</li>
-                    <li>Add shortcut in <code>~/.vimrc</code><br/>
+                    <li>Add shortcut in <code>~/.vimrc</code><br/><br/>
                     <code>cmap w!! %!sudo tee &gt; /dev/null %</code></li>
                 </ul>
             </div>
@@ -401,7 +413,6 @@
                             <td>First argument (word 1) from last command</td></tr>
                     </table>
                     </li>
-                    <li>Demo...</li>
                 </ul>
             </div>
 
@@ -428,9 +439,10 @@
                 <ul>
                     <li>History expansion can lead to very cryptic commands</li>
                     <li>Use "magic space" to expand commands before executing</li>
+                    <li>In <code>~/.inputrc</code></li>
                 </ul>
                 <pre>$if Bash
-	Space: magic-space
+    Space: magic-space
 $endif </div>
 
             <div class="slide">
@@ -470,7 +482,7 @@ export PATH<pre>
                 <h1><code>~/.my.cnf</code> - Easy authentication</h1>
                 <ul>
                     <li>For user-specific options</li>
-                    <li>Add some user credentials (read-only access is a good idea):
+                    <li>Add some user credentials (read-only access):
                     <pre>[client]
 user = local-user
 password = s3cr3tp455w0rd</pre>
@@ -514,12 +526,12 @@ prompt=(\\u@\\h) [\\d]>\\_</pre>
 
             <div class="slide">
                 <h1>Copy database between machines</h1>
-                <code class="main">$ mysqldump -h $HOST -u $USER -p $DATABASENAME | mysql -D $DATABASENAME</code>
+                <code class="main">$ mysqldump -p -h $HOST -u $USER $DATABASENAME | mysql -D $DATABASENAME</code>
                 <ul>
                     <li>Copies SQL over the wire</li>
                     <li><code>mysql</code> reads SQL from STDIN</li>
                 </ul>
-                <code class="main">$ mysqldump -h $HOST -u $USER -p $DATABASENAME | sed 's/@[a-zA-Z0-9.]*/@localhost' | mysql -D $DATABASENAME</code>
+                <code class="main">$ mysqldump -p -h $HOST -u $USER $DATABASENAME | sed 's/@[a-zA-Z0-9.]*/@localhost' | mysql -D $DATABASENAME</code>
                 <ul>
                     <li>Anonymise email addresses as part of copy</li>
                 </ul>
@@ -587,7 +599,7 @@ prompt=(\\u@\\h) [\\d]>\\_</pre>
                         <li>executing remote commands</li>
                         <li>tunnelling</li>
                         <li>port forwarding</li>
-                        <li>X11 forwarding</li>
+                        <li>X11 connections</li>
                     </ul>
                     </li>
                 </ul>
@@ -643,7 +655,6 @@ prompt=(\\u@\\h) [\\d]>\\_</pre>
             <div class="slide">
                 <h1><code>~/.ssh/config</code> - Named hosts</h1>
                 <ul>
-                    <li>User-specified SSH config options</li>
                     <li>Add nicknames for commonly used hosts (with tab-complete support):
                     <pre>Host mysite-app1
     HostName 74.117.251.129
@@ -662,7 +673,7 @@ KeepAlive yes</pre>
             </div>
 
             <div class="slide">
-                <h1>Custom prompts</h1>
+                <h1>Digression: custom prompts</h1>
                 <code class="main">david@earth:~ $ </code>
                 <code class="main"><span style="color:red">root@mysite-app1:tmp $</span></code>
 
@@ -693,25 +704,25 @@ export PS1
             </div>
 
             <div class="slide">
-                <h1>Connect to unreachable hosts</h1>
-                <code class="main">ssh -t $REACHABLE_HOST ssh $UNREACHABLE_HOST</code>
+                <h1>Edit a remote file using: <code>vim</code></h1>
+                <code class="main">$ vim scp://user@host//path/to/file</code>
                 <ul>
-                    <li>Opens a SSH connection to the unreachable host</li>
-                    <li>Can be generalised to use any number of hosts</li>
+                    <li>Opens remote file within Vim</li>
+                </ul>
+                <code class="main">$ vimdiff /etc/fstab scp://user@host//etc/fstab</code>
+                <ul>
+                    <li>Also works with <code>vimdiff</code></li>
                 </ul>
                 <div class="handout">
                 </div>
             </div>
 
             <div class="slide">
-                <h1>Remote diff</h1>
-                <code class="main">ssh $HOST cat /path/to/file.txt | diff /path/to/local-file.txt -</code>
+                <h1>Connect to unreachable hosts</h1>
+                <code class="main">ssh -t $REACHABLE_HOST ssh $UNREACHABLE_HOST</code>
                 <ul>
-                    <li>Compares remote file to local version</li>
-                </ul>
-                <code class="main">diff &lt;(ssh $HOST1 cat /etc/apt/sources.list) &lt;(ssh $HOST2 cat /etc/apt/sources.list)</code>
-                <ul>
-                    <li>Compares two remote files</li>
+                    <li>Opens a SSH connection to the unreachable host</li>
+                    <li>Can be generalised to use any number of hosts</li>
                 </ul>
                 <div class="handout">
                 </div>
@@ -767,7 +778,7 @@ export PS1
                         <li><span class="key">Alt</span>+[<span class="key">1</span>,<span class="key">2</span>,...] - jump to nth tab</li>
                     </ul>
                     </li>
-                    <li>Try multi-terminal programs (eg <code>GNOME terminator</code>)</li>
+                    <li>Try multi-terminal programs (eg GNOME <code>terminator</code>)</li>
                 </ul>
                 <div class="handout">
                 </div>
@@ -788,10 +799,9 @@ export PS1
                         <tr><th><span class="key">Ctrl</span> + <span class="key">E</span></th><td>Move to end of line</td></tr>
                         <tr><th><span class="key">Ctrl</span> + <span class="key">K</span></th><td>Delete from cursor to end of line</td></tr>
                         <tr><th><span class="key">Ctrl</span> + <span class="key">W</span></th><td>Delete from cursor to start of word</td></tr>
+                        <tr><th><span class="key">Ctrl</span> + <span class="key">D</span></th><td>Delete character / exit</td></tr>
+                        <tr><th><span class="key">Ctrl</span> + <span class="key">X</span>, <span class="key">E</span></th><td>Invoke <code>$EDITOR</code> for current command</td></tr>
                     </table>
-                    </li>
-                    <li>These are emacs bindings, vi bindings are available too:
-                <pre>set -o vi</pre>
                     </li>
                 </ul>
                 <div class="handout">
@@ -833,6 +843,11 @@ export PS1
                 <ul>
                     <li>Run <code>tail</code> in "follow" mode</li>
                     <li>Outputs appended data as the file grows</li>
+                    <li>Useful for watching log files while developing</li>
+                </ul>
+                <code class="main output">$ less +F /var/log/apache2/error.log</code>
+                <ul>
+                    <li>Run <code>less</code> in "follow" mode</li>
                 </ul>
                 <div class="handout">
                 </div>
@@ -853,67 +868,76 @@ export PS1
                 <code class="main output">$ grep -inHr $QUERY ~/workspace/project | grep -v .svn</code>
                 <ul>
                     <li>Searches recursively for pattern</li>
+                    <li>Displays file and line number</li>
                     <li><code>grep -v</code> filters out unwanted results</li>
                 </ul>
-                    <div class="handout">
-                    </div>
+                <div class="handout"> </div>
+            </div>
+
+            <div class="slide">
+                <h1>Use python to server current directory</h1>
+                <code class="main">python -m SimpleHTTPServer</code>
+                <ul>
+                    <li>Creates a dedicated server running on port 8000</li>
+                    <li><code>-m</code> argument specifies a module to execute</li>
+                    <li>Default behaviour of <code>SimpleHTTPServer</code> is to run as webserver in current directory</li>
+                </ul>
+                <code class="main">sudo python -m smtpd -n -c DebuggingServer localhost:25</code>
+                <ul>
+                    <li>Similar but creating a SMTP server</li>
+                </ul>
+                <div class="handout">
                 </div>
+            </div>
 
-                <div class="slide">
-                    <h1>Use python to server current directory</h1>
-                    <code class="main">python -m SimpleHTTPServer</code>
-                    <ul>
-                        <li>Creates a dedicated server running on port 8000</li>
-                        <li><code>-m</code> argument specifies a module to execute</li>
-                        <li>Default behaviour of <code>SimpleHTTPServer</code> is to run as webserver in current directory</li>
-                    </ul>
-                    <code class="main">sudo python -m smtpd -n -c DebuggingServer localhost:25</code>
-                    <ul><li>Similar but creating a SMTP server</li><ul>
-                            <div class="handout">
-                            </div>
-                        </div>
-
-                        <!-- SUMMARY -->
-                        <div class="slide">
-                            <h1 class="section">Summary</h1>
-                        </div>
-
-                        <div class="slide">
-                            <h1>Summary</h1>
-                            <ul>
-                                <li>Mastery of the shell is a key part of being a good developer</li>
-                                <li>A small amount of knowledge can make a big difference to your productivity</li>
-                                <li>Optimise you work-flow using shortcuts, functions, config files</li>
-                            </ul>
-                            <div class="handout">
-                            </div>
-                        </div>
-
-                        <div class="slide">
-                            <h1>Further reading</h1>
-                            <ul>
-                                <li><a href="http://www.commandlinefu.com">commandlinefu.com</a></li>
-                                <li><a href="http://catonmat.net">catonmat.net</a> (Peteris Krumins)</li>
-                            </li>
-                        </ul>
-                        <div class="handout">
-                        </div>
-                    </div>
-
-                    <!-- TEMPLATE SLIDE - DO NOT OVERWRITE 
-                    <div class="slide">
-                        <h1></h1>
-                        Further reading:
-                        <ul>
-                            <li>
-                            <a href="http://www.ukuug.org/events/linux2003/papers/bash_tips/">http://www.ukuug.org/events/linux2003/papers/bash_tips/</a>
-                            </li>
-                        </ul>
-                        <div class="handout">
-                        </div>
-                    </div>
-                    -->
-
+            <div class="slide">
+                <h1>Query wikipedia using DNS</h1>
+                <code class="main">dig +short txt $KEYWORD.wp.dg.cx</code>
+                <ul>
+                    <li>Requests TXT record...</li>
+                    <li>...which is a snippet from Wikipedia for <code>$KEYWORD</code></li>
+                </ul>
+                <div class="handout">
                 </div>
-            </body>
-        </html>
+            </div>
+
+            <div class="slide">
+                <h1>Watch ASCII Star Wars using <code>telnet</code></h1>
+                <code class="main">telnet towel.blinkenlights.nl</code>
+                <ul>
+                    <li>See also</li>
+                </ul>
+                <code class="main">telnet towel.blinkenlights.nl 666</code>
+                <div class="handout">
+                </div>
+            </div>
+
+            <!-- SUMMARY -->
+            <div class="slide">
+                <h1 class="section">Summary</h1>
+            </div>
+
+            <div class="slide">
+                <h1>Summary</h1>
+                <ul>
+                    <li>Mastery of the shell is a key part of being a good developer</li>
+                    <li>A small amount of knowledge can make a big difference to your productivity</li>
+                    <li>Optimise you work-flow using shortcuts, functions, config files</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+            <div class="slide">
+                <h1>Further reading</h1>
+                <ul>
+                    <li><a href="http://www.commandlinefu.com">commandlinefu.com</a></li>
+                    <li><a href="http://catonmat.net">catonmat.net</a> (Peteris Krumins)</li>
+                </ul>
+                <div class="handout">
+                </div>
+            </div>
+
+        </div>
+    </body>
+</html>
